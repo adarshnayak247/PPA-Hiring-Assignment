@@ -55,7 +55,7 @@ export const Navbar = () => {
 
     return (
         <nav className="flex items-center justify-between px-[20px] py-[16px]">
-            <div className="flex gap-[8px]">
+            <div className="flex gap-[8px] dark:hidden">
                 <div>
                     <Image src="/Icon.svg" width={35} height={24} alt="logo" />
                 </div>
@@ -67,6 +67,16 @@ export const Navbar = () => {
                         alt="logo"
                     />
                 </div>
+            </div>
+            <div className="flex gap-[8px]  hidden dark:block">
+            <div className="flex flex-col lg:gap-10 gap-5 lg:mb-0 max-w-[350px]">
+                    <img
+                        src="/footer/Logo.png"
+                        alt="footer logo"
+                        className="w-48 h-7"
+                    />
+
+            </div>
             </div>
 
             <div className="hidden lg:flex flex-row gap-10 h-[24px]">

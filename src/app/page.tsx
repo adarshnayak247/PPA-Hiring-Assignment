@@ -1,5 +1,7 @@
 
 
+import Client from "@/components/common/Client";
+import CommunitySection from "@/components/common/Community";
 import Hero from "@/components/common/Hero";
 import { Navbar } from "@/components/common/Navbar";
 
@@ -11,6 +13,8 @@ export default function Home() {
     <>
      <Navbar/>
      <Hero/>
+     <Client/>
+     <CommunitySection/>
     </>
   );
 }

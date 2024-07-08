@@ -1,118 +1,109 @@
-"use client"
-import React, { useState } from "react";
+"use client";
+import { X } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { ModeToggle } from "./Darkmode";
+import { Button } from "../ui/button";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
-export const ModeToggle = () => {
-    const { setTheme } = useTheme();
+interface MenuItem {
+    name: string;
+    link: string;
+}
 
-    return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
-                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                    <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                    <span className="sr-only">Toggle theme</span>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("system")}>
-                    System
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
-    );
-};
-
-export const Navbar = () => {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const navItems = [
-        { name: "Home", href: "#" },
-        { name: "Service", href: "#" },
-        { name: "Feature", href: "#" },
-        { name: "Product", href: "#" },
-        { name: "Testimonial", href: "#" },
-        { name: "FAQ", href: "#" },
-    ];
-
-    const toggleMobileMenu = () => {
-        setIsMobileMenuOpen(!isMobileMenuOpen);
+const NavBar: React.FC = () => {
+    const [menu, setMenu] = useState(false);
+    const toggleMenu = () => {
+        setMenu(!menu);
     };
 
+    const menuItems: MenuItem[] = [
+        { name: "Home", link: "/" },
+        { name: "Service", link: "/" },
+        { name: "Feature", link: "/" },
+        { name: "Product", link: "/" },
+        { name: "Testimonial", link: "/" },
+        { name: "Faq", link: "/" },
+    ];
+
     return (
-        <nav className="flex items-center justify-between px-[20px] py-[16px]">
-            <div className="flex gap-[8px] dark:hidden">
-                <div>
-                    <Image src="/Icon.svg" width={35} height={24} alt="logo" />
+        <div className="md:sticky md:top-0 md:shadow-none z-20">
+            {/* DESKTOP */}
+            <div className="hidden lg:block animate-in fade-in zoom-in bg-[#F5F7FA] dark:bg-[#020817] py-4">
+                <div className="flex justify-between lg:mx-[9rem] items-center gap-4">
+                    <div>
+                        <Image width={154} height={24} src="/footer/logo1.svg" alt="logo" className="dark:bg-white p-2 rounded-sm" />
+                    </div>
+
+                    <div className="flex gap-[20px] xl:gap-[50px] text-[16px] items-center select-none  text-[#4D4D4D]">
+                        {menuItems.map((item, id) => (
+                            <Link key={id} href={item.link} className="hover:text-primary cursor-pointer flex items-center gap-2 font-[500] text-gray">
+                                {item.name}
+                            </Link>
+                        ))}
+                    </div>
+                    <div className="flex items-center gap-[40px] select-none">
+                        <Link href="/" className="hover:text-primary cursor-pointer flex items-center gap-2 font-[500] text-[#4CAF4F]">
+                            Login
+                        </Link>
+                        <Button className="w-[90px] h-[40px] text-sm font-[500] bg-[#4CAF4F] text-white">Sign Up</Button>
+                        <ModeToggle />
+                    </div>
                 </div>
-                <div>
-                    <Image
-                        src="/Nexcent.svg"
-                        width={111.49}
-                        height={20.66}
-                        alt="logo"
-                    />
+            </div>
+            {/* MOBILE */}
+            <div
+                className={`block lg:hidden shadow-sm fixed top-0 w-full z-[40] !bg-[#F5F7FA] dark:!bg-[#020817] py-4 animate-in fade-in zoom-in ${
+                    menu ? " bg-primary py-2" : ""
+                }`}
+            >
+                <div className="flex justify-between px-4">
+                    <div className="flex gap-[50px] text-[16px] items-center select-none">
+                        <Image
+                            width={112}
+                            height={30}
+                            src="/footer/logo1.svg"
+                            alt="logo"
+                            className="w-[7rem] dark:bg-white p-2 rounded-sm"
+                        />
+                    </div>
+                    <div className="flex items-center gap-[40px]">
+                        <ModeToggle />
+                        {menu ? (
+                            <X className="cursor-pointer animate-in fade-in zoom-in text-black dark:text-white" onClick={toggleMenu} />
+                        ) : (
+                            <Image
+                                width={24}
+                                height={24}
+                                src="/footer/lines.svg"
+                                alt="menu icon"
+                                className="cursor-pointer animate-in fade-in zoom-in"
+                                onClick={toggleMenu}
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
-            <div className="flex gap-[8px]  hidden dark:block">
-            <div className="flex flex-col lg:gap-10 gap-5 lg:mb-0 max-w-[350px]">
-                    <img
-                        src="/footer/Logo.png"
-                        alt="footer logo"
-                        className="w-48 h-7"
-                    />
+                {menu && (
+                    <div className="my-8 select-none animate-in slide-in-from-right">
+                        <div className="flex flex-col gap-8 mt-8 px-4">
+                            {menuItems.map((item, id) => (
+                                <Link key={id} href={item.link} className="hover:text-primary cursor-pointer flex items-center gap-2 font-[500] text-gray">
+                                    {item.name}
+                                </Link>
+                            ))}
 
+                            <div className="flex flex-col gap-[40px] select-none">
+                                <Link href="/" className="hover:text-primary cursor-pointer flex items-center gap-2 font-[500] text-gray dark:text-white">
+                                    Login
+                                </Link>
+                                <Button className="w-[90px] h-[40px] text-sm font-[500] bg-[#4CAF4F] text-white">Sign Up</Button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
-            </div>
-
-            <div className="hidden lg:flex flex-row gap-10 h-[24px]">
-                {navItems.map((item) => (
-                    <a
-                        key={item.name}
-                        href={item.href}
-                        className="text-[#18191F] dark:text-white"
-                    >
-                        {item.name}
-                    </a>
-                ))}
-            </div>
-
-            <div className="lg:hidden flex">
-                <Button variant="ghost" className="text-black dark:text-white">
-                    ☰
-                </Button>
-            </div>
-
-            <div className="flex gap-[14px]">
-                <ModeToggle />
-
-                <Button
-                    variant="outline"
-                    className="border border-customGray bg-customGray p-[10px] pl-[20px] pr-[20px] rounded-tl-[6px]  text-[#4CAF4F] font-inter text-[14px] font-medium leading-[20px] text-center"
-                >
-                    Login
-                </Button>
-
-                <Button
-                    className="bg-[#4CAF4F] text-[#FFFFFF] rounded-tl-[6px] p-[10px] pl-[20px] pr-[20px] font-inter text-[14px] font-medium leading-[20px] text-center"
-                >
-                    Sign up
-                </Button>
-            </div>
-        </nav>
+        </div>
     );
 };
+
+export default NavBar;
